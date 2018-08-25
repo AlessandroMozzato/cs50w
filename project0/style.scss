@@ -1,0 +1,41 @@
+
+$list: home lightblue, cv-item yellow, contacts red, hobbies lightgreen;
+
+@each $tuple in $list {
+    .#{nth($tuple, 1)} {
+        margin:0 auto;
+        background-color: #{nth($tuple, 2)};
+    }
+    @media only screen and (min-width: 800px) {
+        .#{nth($tuple, 1)} {
+            width: 80%;
+        }
+    }
+}
+
+.footer {
+	font-size: 13px;
+	background-color: lightgrey;
+    position: fixed;
+    bottom: 0;
+}
+
+h1 {
+	font-size: 45px
+}
+
+h2 {
+	font-size: 30px;
+}
+
+#tableskills tr:nth-child(even){background-color: #f2f2f2;}
+
+#tableskills tr:hover {background-color: #ddd;}
+
+#tableskills th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}

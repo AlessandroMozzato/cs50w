@@ -1,36 +1,72 @@
-div {
-	background-color: lightblue;
-	margin-top: 10%;
-	margin-bottom: 10%;
-	margin-right: : 10%;
-	margin-left: 10%;
+.home {
+  margin: 0 auto;
+  background-color: lightblue;
 }
 
+@media only screen and (min-width: 800px) {
+  .home {
+    width: 80%;
+  }
+}
 .cv-item {
-	background-color: yellow;
+  margin: 0 auto;
+  background-color: yellow;
 }
 
+@media only screen and (min-width: 800px) {
+  .cv-item {
+    width: 80%;
+  }
+}
 .contacts {
-	background-color: red;
+  margin: 0 auto;
+  background-color: red;
 }
 
+@media only screen and (min-width: 800px) {
+  .contacts {
+    width: 80%;
+  }
+}
 .hobbies {
-	background-color: lightgreen;
+  margin: 0 auto;
+  background-color: lightgreen;
 }
 
-footer {
-	font-size: 13px;
-	background-color: lightgrey;
-	margin-top: 50%;
-	margin-bottom: 0%;
-	margin-right: : 10%;
-	margin-left: 10%;	
+@media only screen and (min-width: 800px) {
+  .hobbies {
+    width: 80%;
+  }
+}
+.footer {
+  font-size: 13px;
+  background-color: lightgrey;
+  position: fixed;
+  bottom: 0;
 }
 
 h1 {
-	font-size: 45px
+  font-size: 45px;
 }
 
 h2 {
-	font-size: 30px;
+  font-size: 30px;
 }
+
+#tableskills tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#tableskills tr:hover {
+  background-color: #ddd;
+}
+
+#tableskills th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+/*# sourceMappingURL=style.css.map */
