@@ -6,3 +6,31 @@ div {
 	margin-left: 10%;
 }
 
+.cv-item {
+	background-color: yellow;
+}
+
+.contacts {
+	background-color: red;
+}
+
+.hobbies {
+	background-color: lightgreen;
+}
+
+footer {
+	font-size: 13px;
+	background-color: lightgrey;
+	margin-top: 50%;
+	margin-bottom: 0%;
+	margin-right: : 10%;
+	margin-left: 10%;	
+}
+
+h1 {
+	font-size: 45px
+}
+
+h2 {
+	font-size: 30px;
+}
