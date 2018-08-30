@@ -39,10 +39,22 @@
   }
 }
 .footer {
-  font-size: 13px;
+  /*font-size: 15px;
   background-color: lightgrey;
+     position: fixed;
+     bottom: 0;
+     left: 40%;*/
   position: fixed;
   bottom: 0;
+  left: 50%;
+  width: 30em;
+  height: 3em;
+  margin-top: -9em;
+  /*set to a negative number 1/2 of your height*/
+  margin-left: -15em;
+  /*set to a negative number 1/2 of your width*/
+  border: 1px solid #ccc;
+  background-color: lightgrey;
 }
 
 h1 {
