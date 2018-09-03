@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ book.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ book.title }}</h1>
+    
+    <h2>by {{ book.author }}</h2>
+    <p>Published in {{ book.year }}. ISBN: {{ book.isbn }}</p>
+    <p>The book has {{ reviews_count }} reviews on <a href="https://goodreads.com">goodreads.com</a> with an average of {{ average_rating }}</p>
+
+{% endblock %}

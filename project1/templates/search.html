@@ -1,29 +1,32 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Flights
+    Books
 {% endblock %}
 
 {% block body %}
-    <h1>Book a Flight</h1>
+    <h1>Search for a book</h1>
 
-    <form action="{{ url_for('book') }}" method="post">
+    <form action="{{ url_for('search') }}" method="post">
 
         <div class="form-group">
-            <select class="form-control" name="flight_id">
-                {% for flight in flights %}
-                    <option value="{{ flight.id }}">{{ flight.origin }} to {{ flight.destination }}</option>
-                {% endfor %}
-            </select>
+            <input class="form-control" name="title" placeholder="Enter book title, author or isbn">
         </div>
 
         <div class="form-group">
-            <input class="form-control" name="name" placeholder="Passenger Name">
-        </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Book Flight</button>
+            <button class="btn btn-primary">Search</button>
         </div>
 
     </form>
+
+
+    {% if books %}
+        <ul>
+            {% for book in books %}            
+                <li><a href="{{ url_for('book', book_id=book.id) }}">{{ book.title }} by {{ book.author }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+        
+
 {% endblock %}
