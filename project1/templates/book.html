@@ -11,4 +11,28 @@
     <p>Published in {{ book.year }}. ISBN: {{ book.isbn }}</p>
     <p>The book has {{ reviews_count }} reviews on <a href="https://goodreads.com">goodreads.com</a> with an average of {{ average_rating }}</p>
 
+
+    <h2>Write a review</h2>
+        <form action="{{ url_for('book', book_id=book.id) }}" method="post">
+
+        <div class="form-group">
+            <input class="form-control" name="newreview" placeholder="Write your review">
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary">Submit review</button>
+        </div>
+        </form>
+
+    <h2>Reviews for this book:</h2>
+    {% if reviews %}
+        <ul>
+        {% for review in reviews %}
+            <li>{{ review.review }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There is no review for this book at the moment</p>
+    {% endif %}
+
 {% endblock %}
