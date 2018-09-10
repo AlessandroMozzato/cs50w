@@ -99,11 +99,11 @@ def book(book_id):
     res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": grkey, "isbns": book.isbn})
     reviews_count = res.json()['books'][0]['reviews_count']
     average_rating = res.json()['books'][0]['average_rating']
-
+    
     if (request.method == "POST"):
         if session['user_id'] in [review.user_id for review in reviews]:
             return render_template("error.html", message="You already have a review for this book.")
-        
+
         newreview = request.form.get("newreview")
 
         db.execute("INSERT INTO reviews (user_id, book_id, review) VALUES (:user_id, :book_id, :review)",
