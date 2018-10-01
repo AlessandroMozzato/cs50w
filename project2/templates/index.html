@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Flack
+{% endblock %}
+
+{% block body %}
+
+<script type="text/javascript">
+    if (window.localStorage.hasOwnProperty("username") == false) {
+        var username = window.prompt("Your username","username");
+        window.localStorage.setItem("username", username);
+    } else {
+        var username = window.localStorage.getItem("username");
+    }
+
+    function showUsername() {
+        document.getElementById("username").innerHTML = username;
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Connect to websocket
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        // When connected, configure buttons
+        socket.on('connect', () => {
+
+            // Each button should emit a "submit vote" event
+            document.querySelectorAll('button').forEach(button => {
+                button.onclick = () => {
+                    const selection = button.dataset.vote;
+                    socket.emit('submit vote', {'selection': selection});
+                };
+            });
+        });
+
+        // When a new vote is announced, add to the unordered list
+        socket.on('vote totals', data => {
+            document.querySelector('#new').innerHTML = data.new;
+        });
+
+    });
+
+            document.addEventListener('DOMContentLoaded', () => {
+
+                document.querySelector('#new-chat').onsubmit = () => {
+
+                    // Create new item for list
+                    const li = document.createElement('li');
+                    li.innerHTML = document.querySelector('#task').value;
+
+                    // Add new item to task list
+                    document.querySelector('#tasks').append(li);
+
+                    // Clear input field
+                    document.querySelector('#task').value = '';
+
+                    // Stop form from submitting
+                    return false;
+                };
+
+            });
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Connect to websocket
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        // When connected, configure buttons
+        socket.on('connect', () => {
+
+            // Each button should emit a "submit vote" event
+            document.querySelectorAll('button').forEach(button => {
+                button.onclick = () => {
+                    const selection = document.querySelector('#task').value;
+                    socket.emit('submit vote', {'selection': selection});
+                };
+            });
+        });
+
+        // When a new vote is announced, add to the unordered list
+        socket.on('vote totals', data => {  
+            document.querySelector('#new').innerHTML = data.new;
+        });
+
+    });
+
+</script>
+
+<div class="container">
+<h1 class=" text-center">Flack - Logged in as: <span id="username"></span></h1>
+<script type="text/javascript">showUsername();</script>
+
+    <div class="inbox_people">
+        <div class="chat_header">
+            <h2>Chat list</h2>
+                <form id="new-chat">
+                    <input data-chatname="name" id="task" autocomplete="off" autofocus placeholder="New Chat" type="text">
+                    <button data-vote="new" type="submit" class="btn btn-primary">New Chat</button>
+                </form>
+        </div>
+        
+
+        <div>Chats: <span id="new">{{chats["new"]}}</span></div>
+
+        <ul id="tasks"></ul>
+
+    <!--         {% for j in range(chats["new"]|int) %}
+                <p>Chat name {{j}}</p>
+            {% endfor %} -->
+    </div>
+
+
+    <div class="expanded_chat">
+        <div class="chat_header">
+            <h2>Chat Name</h2>
+        </div> 
+    </div>
+
+</div>
+{% endblock %}
