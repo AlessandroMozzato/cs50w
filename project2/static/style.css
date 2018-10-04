@@ -1,5 +1,11 @@
-.container{max-width:1170px; margin:auto;}
-img{ max-width:100%;}
+.container {
+	max-width:1170px; 
+	margin:auto;
+}
+
+img { 
+	max-width:100%;
+}
 
 .expanded_chat {
   float: left;
@@ -10,5 +16,18 @@ img{ max-width:100%;}
 .inbox_people {
   float: left;
   overflow: hidden;
-  width: 30%; border-right:1px;
+  width: 30%; 
+  border-right:1px;
+}
+
+.show_chat {
+	height: 90%;
+	border-bottom: 1px: 
+}
+
+.instert_message {
+	position:fixed;
+   	bottom:1%;
+   	height:10%;
+	/*height: 10%; border-top:1px;*/
 }

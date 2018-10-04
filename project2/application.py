@@ -1,20 +1,47 @@
 import os
 
-from flask import Flask, session, render_template, request, jsonify
+from flask import Flask, session, render_template, request, jsonify, url_for
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
-chats = {"new": 0}
+chatnames = {}
+chatsfull = {}
 
 @app.route("/")
 def index():
-    return render_template('index.html', chats=chats)
+	path = url_for('index')
+	return render_template('index.html', chatnames=chatnames, chatsfull=chatsfull)
 
-@socketio.on("submit vote")
+@socketio.on("create chat")
 def vote(data):
-    selection = data["selection"]
-    chats[selection] += 1
-    emit("vote totals", chats, broadcast=True)
+	chatname = data["chatname"]
+	if chatname in chatnames:
+		chatname = 'Raise:error'
+	else:
+		chatnames[chatname] = chatname
+	emit("all chats", chatname, broadcast=True)
+
+
+@socketio.on("send message")
+def message(data):
+	print(data)
+	data = data['message'].split('::')
+	message = data[0]
+	chatname = data[1]
+
+	if chatname in chatsfull.keys():
+		chatsfull[chatname].append(message)
+	else:
+		chatsfull[chatname] = [message]
+	emit("messages", message, broadcast=True)
+
+@app.route("/chats/<string:chatname>")
+def chat(chatname):
+    return render_template('index.html', chatnames=chatnames, chatname=chatname, chatsfull=chatsfull)
+
+@app.route("/chatsapi", methods=['GET','POST'])
+def chatapi():
+	return jsonify(chatsfull)
