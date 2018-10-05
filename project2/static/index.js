@@ -41,6 +41,24 @@ function showMessages() {
     request.send();
 };
 
+function trillo() {
+
+    document.querySelector('#insert_m').className = 'instert_message_nonfixed';
+    document.querySelector('#allcont').className = 'container ahashakeheartache';
+
+    function normal() {
+        document.querySelector('#allcont').className = 'container';
+        document.querySelector('#insert_m').className = 'instert_message';
+    }
+
+    setTimeout(normal, 200);
+
+    const li = document.createElement('li');
+    li.innerHTML =  username + ' has sent a drill!!!';
+    document.querySelector('#messages').append(li);
+    document.querySelector('#message').value = '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
@@ -49,20 +67,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Each button should emit a "submit vote" event
         document.querySelector('#createchat').onclick = () => {
                 var chatname = document.querySelector('#chatname').value;
-                socket.emit('create chat', {'chatname':chatname});
+                if (chatname == '') {
+                    alert('Empty name is not allowed');
+                } else {
+                    socket.emit('create chat', {'chatname':chatname});
+                }
         };
 
         document.querySelector('#newmessage').onclick = () => {
-                var message = document.querySelector('#message').value;
+            var message = document.querySelector('#message').value;
+            if (message == '') {
+                alert('Empty messages are not allowed')
+            } else {
                 var d = new Date();
                 date = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
                 message = date + " " + username + " wrote: " + message + '::' + chatname_txt
                 socket.emit('send message', {'message':message});
+            }
         };
     });
 
     // When a new vote is announced, add to the unordered list
-    socket.on('all chats', data => {  
+    socket.on('all chats', data => {
         if (data == 'Raise:error') {
             alert('Chatname already exists');
             document.querySelector('#chatname').value = '';

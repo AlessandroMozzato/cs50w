@@ -34,6 +34,8 @@ def message(data):
 
 	if chatname in chatsfull.keys():
 		chatsfull[chatname].append(message)
+		if len(chatsfull[chatname])>100:
+			chatsfull[chatname].pop(0)
 	else:
 		chatsfull[chatname] = [message]
 	emit("messages", message, broadcast=True)

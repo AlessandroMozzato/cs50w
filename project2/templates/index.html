@@ -6,14 +6,16 @@
 
 {% block body %}
 
-<div class="container">
-<h1 class=" text-center">Flack - Logged in as: <span id="username"></span></h1>
-<script type="text/javascript">showUsername();</script>
+<div id="allcont" class="container">
+    <div class="title">
+        <h1 class=" text-center">Flack - Logged in as: <span id="username"></span></h1>
+        <script type="text/javascript">showUsername();</script>
+    </div>
     <div class="inbox_people">
         <div class="chat_header">
             <h2>Chat List</h2>
                 <input id="chatname" autocomplete="off" autofocus placeholder="New Chat" type="text">
-                <button id="createchat" type="submit" class="btn btn-primary">New Chat</button>
+                <button id="createchat" type="submit" class="btn btn-danger">New Chat</button>
         </div>
 
         <ul id="chats">
@@ -30,10 +32,7 @@
                 <script type="text/javascript">storeChatname(); </script>
             {% else %}
                 <h2>Chat Name: <span id="chatnamejs"></span></h2>
-                <script type="text/javascript">
-                    showChatname(); 
-                    showMessages();
-                </script>
+                <script type="text/javascript">showChatname(); showMessages();</script>
             {% endif %}
         </div>
         <div class="show_chat">
@@ -45,9 +44,10 @@
                 {% endif %}
             </ul>
         </div>
-        <div class="instert_message">
+        <div id="insert_m" class="instert_message">
             <input id="message" autocomplete="off" autofocus placeholder="New Message" type="text">
-            <button id="newmessage" type="submit" class="btn btn-primary">New Message</button>
+            <button id="newmessage" type="submit" class="btn btn-danger">New Message</button>
+            <button id="trillo" onclick="trillo();" type="submit" class="btn btn-primary">Drill!</button>
         </div>
     </div>
 </div>
