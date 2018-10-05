@@ -4,7 +4,7 @@ Web Programming with Python and JavaScript
 
 For this project I chose to do a personal web page template.
 
-The project is composed of 4 pages, the first general page, and the pages of more informations: a cv page, an hobby page and a contact page.
+The project is composed of 4 pages, the first is a general page, and the other 3 pages of more informations: a cv page, an hobby page and a contact page.
 
 I put a nice big portrait picture in front of the page together with name and a list of the pages available in the website.
 For the list of pages i uses the btn-grp component of bootstrap to make the list look nice.
