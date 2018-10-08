@@ -16,3 +16,5 @@ The contacts page containes a list of contacts.
 Finally all three pages contain a footer with links to all pages to allow to go through every page in the website. The footer is organized in columns using the bootstrap grid component.
 
 I used sass to assign different colors to various divs and to do assign the media query to all the pages.
+
+I used the media query to change the space occupied by the central div when the page shrinks, going from 80% to 100%.

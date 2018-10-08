@@ -39,16 +39,3 @@ img {
 
 .instert_message_nonfixed {
 }
-
-.ahashakeheartache {
-  -webkit-animation: kf_shake 0.4s 1 linear;
-}
-
-@-webkit-keyframes kf_shake {
-  0% { -webkit-transform: translate(5%); }
-  20% { -webkit-transform: translate(-5%); }
-  40% { -webkit-transform: translate(8%); }
-  60% { -webkit-transform: translate(-8%); }
-  80% { -webkit-transform: translate(3%); }
-  100% { -webkit-transform: translate(0%); }
-}

@@ -11,8 +11,8 @@
 
     <div id="exTab2" class="container"> 
         <ul class="nav nav-tabs nav-pills nav-justified">
-            <li class="nav-item active">
-                <a class="nav-link" href="#1" data-toggle="tab">Register</a>
+            <li class="nav-item">
+                <a class="nav-link active" href="#1" data-toggle="tab">Register</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#2" data-toggle="tab">Login</a>
@@ -64,8 +64,8 @@
         {% endif %}
 
         {% if type == 'register' %}
-            <h2>Welcome {{ session['username'] }}!</h2>
-            <h3><a href="{{ url_for('search') }}">Clich here to make a search</a></h3>
+            <h2>Thanks for registering!</h2>
+            <h3><a href="{{ url_for('index') }}">Clich here to log in</a></h3>
         {% endif %}
     {% endif %}
 

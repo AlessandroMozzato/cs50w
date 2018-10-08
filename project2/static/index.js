@@ -41,24 +41,6 @@ function showMessages() {
     request.send();
 };
 
-function trillo() {
-
-    document.querySelector('#insert_m').className = 'instert_message_nonfixed';
-    document.querySelector('#allcont').className = 'container ahashakeheartache';
-
-    function normal() {
-        document.querySelector('#allcont').className = 'container';
-        document.querySelector('#insert_m').className = 'instert_message';
-    }
-
-    setTimeout(normal, 200);
-
-    const li = document.createElement('li');
-    li.innerHTML =  username + ' has sent a drill!!!';
-    document.querySelector('#messages').append(li);
-    document.querySelector('#message').value = '';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);

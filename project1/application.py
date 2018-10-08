@@ -39,8 +39,8 @@ def index():
         db.commit()
 
         user = (db.execute("SELECT * FROM users WHERE (username = :username)", {"username": username}).fetchone())
-        session['user_id'] = user['id']
-        session['username'] = username
+        session['user_id'] = 'has_registered'
+        #session['username'] = username
 
         return render_template('index.html', type='register')
 
