@@ -31,7 +31,9 @@ def message(data):
 	data = data['message'].split('::')
 	message = data[0]
 	chatname = data[1]
+	color = data[2]
 
+	message = message + '::' + color
 	if chatname in chatsfull.keys():
 		chatsfull[chatname].append(message)
 		if len(chatsfull[chatname])>100:

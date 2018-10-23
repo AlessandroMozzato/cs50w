@@ -33,7 +33,8 @@ function showMessages() {
             arr = data[chatname_txt];
             for (var i = 0; i < arr.length; i++) {
                 const li = document.createElement('li');
-                li.innerHTML = arr[i];
+                li.innerHTML =  arr[i].split('::')[0];
+                li.style.color = arr[i].split('::')[1];
                 document.querySelector('#messages').append(li);
             }
         }
@@ -58,12 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#newmessage').onclick = () => {
             var message = document.querySelector('#message').value;
+            var color = document.querySelector('#colorsel').value;
             if (message == '') {
                 alert('Empty messages are not allowed')
             } else {
                 var d = new Date();
                 date = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-                message = date + " " + username + " wrote: " + message + '::' + chatname_txt
+                message = date + " " + username + " wrote: " + message + '::' + chatname_txt + '::' + color;
                 socket.emit('send message', {'message':message});
             }
         };
@@ -85,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a new vote is announced, add to the unordered list
     socket.on('messages', data => {  
         const li = document.createElement('li');
-        li.innerHTML =  data;
+        li.innerHTML =  data.split('::')[0];
+        li.style.color = data.split('::')[1];
         document.querySelector('#messages').append(li);
         document.querySelector('#message').value = '';
     });

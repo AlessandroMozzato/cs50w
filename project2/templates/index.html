@@ -39,7 +39,7 @@
             <ul id="messages">
                 {% if chatname in chatsfull.keys() %}
                     {% for message in chatsfull[chatname] %}
-                        <li>{{ message }}</li>
+                        <li style="color:{{ message.split('::')[1] }};">{{ message.split('::')[0] }}</li>
                     {% endfor %}
                 {% endif %}
             </ul>
@@ -47,6 +47,7 @@
         <div id="insert_m" class="instert_message">
             <input id="message" autocomplete="off" autofocus placeholder="New Message" type="text">
             <button id="newmessage" type="submit" class="btn btn-danger">New Message</button>
+            Select color: <input id="colorsel" type="color" value="#000000" placeholder="Select color">
         </div>
     </div>
 </div>
