@@ -1,0 +1,15 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Menu
+{% endblock %}
+
+{% block body %}
+    <h1>Menu</h1>
+    	{% for item in items %}
+    		<li>
+    			{{ item.name }} - {{ item.price }}
+    		</li>
+    	{% endfor %}
+
+{% endblock %}
