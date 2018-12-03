@@ -1,3 +1,42 @@
 body {
     font-family: sans-serif;
 }
+
+.container {
+	max-width:1170px;
+	margin:auto;
+}
+
+img { 
+	max-width:100%;
+}
+
+.title {
+  width: 100%;
+  background-color: #FFFF66;
+}
+
+.menu {
+  float: left;
+  overflow: hidden;
+  padding: 0 0px 0 5px;
+  width: 60%;
+  border-right:1px;
+  background-color: #FFFACD;
+}
+
+.cartdiv {
+  float: left;
+  padding: 0 0 0 5px;
+  width: 39%;
+  background-color: #FFE4B5;
+}
+
+.logout {
+  position:fixed;
+  top:2%;
+  right:5%;
+}
+
+.instert_message_nonfixed {
+}

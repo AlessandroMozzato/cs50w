@@ -5,11 +5,51 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Menu</h1>
-    	{% for item in items %}
-    		<li>
-    			{{ item.name }} - {{ item.price }}
-    		</li>
-    	{% endfor %}
+{% if user.is_authenticated %}
+<!--   Hi {{ user.username }}!
+ -->
+<div id="allcont" class="container">
+	<div class="title">
+		<h1>Pinocchio's Pizza & Subs</h1>
+		<p>74 Winthrop Street</p>
+		<p>Harvard Square</p>
+		<p>617-876-4897</p>
+	</div>
+	
+	<div class="menu">
+	    <h1>Menu</h1>
+	    	<table>
+				<tr>
+					<td>Firstname</td>
+					<td>Lastname</td> 
+				    <td>Age</td>
+				</tr>
+				{% for item in items %}
+				 	<tr>
+				    	<td>{{ item.name }}</td>
+					    <td><a href="#" onclick='javascript:addToCart("{{item}}")';>{{ item.price }}</a></td> 
+					    <td><a href="#" onclick='javascript:addToCart("{{item}}");'>{{ item.price_big }}</a></td>
+					</tr>
+				{% endfor %}
+			</table>
+	</div>
+
+	<div class="cartdiv">
+		<div class="cart">
+			<h2>Cart</h2>
+			<ul  id="cartitems">
+				
+			</ul>
+			
+		</div>
+
+		<div class="logout"><p><a href="{% url 'logout' %}">logout</a></p></div>
+	</div>
+ 	
+{% else %}
+	<p>You are not logged in</p>
+	<p><a href="{% url 'signup' %}">signup</a></p>
+	<p><a href="{% url 'login' %}">login</a></p>
+{% endif %}
 
 {% endblock %}
