@@ -20,16 +20,25 @@
 	    <h1>Menu</h1>
 	    	<table>
 				<tr>
-					<td>Firstname</td>
-					<td>Lastname</td> 
-				    <td>Age</td>
+					<td></td>
+					<td style="font-weight: bold;">Small</td> 
+				    <td style="font-weight: bold;">Large</td>
 				</tr>
-				{% for item in items %}
-				 	<tr>
-				    	<td>{{ item.name }}</td>
-					    <td><a href="#" onclick='javascript:addToCart("{{item}}")';>{{ item.price }}</a></td> 
-					    <td><a href="#" onclick='javascript:addToCart("{{item}}");'>{{ item.price_big }}</a></td>
+				{% for c in class_names %}
+					<tr >
+						<td style="font-weight: bold;">{{ c }}</td>
 					</tr>
+
+					{% for item in items %}
+						{% if item.class_name == c %}
+				 	<tr>
+				    	<td width="65%">{{ item.name }}</td>
+					    <td width="25%"><a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.name}}", "{{item.price}}", "{{item.num_toppings}}", "small");'>{{ item.price }}</a></td> 
+					    <td width="25%"><a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.name}}", "{{item.price_big}}", "{{item.num_toppings}}", "large");'>{{ item.price_big }}</a></td>
+					</tr>
+
+						{% endif %}
+						{% endfor %}						
 				{% endfor %}
 			</table>
 	</div>
@@ -37,13 +46,18 @@
 	<div class="cartdiv">
 		<div class="cart">
 			<h2>Cart</h2>
-			<ul  id="cartitems">
+			<ul id="cartitems">
 				
 			</ul>
+			<ul id="toppings">
+				
+			</ul>
+			<hr>
+			<h5 id="total"></h5>
 			
 		</div>
 
-		<div class="logout"><p><a href="{% url 'logout' %}">logout</a></p></div>
+		<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>
 	</div>
  	
 {% else %}

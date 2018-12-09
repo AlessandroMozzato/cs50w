@@ -21,8 +21,8 @@ def index(request):
 	menu = list(Menu.objects.all())
 
 	context = {
+		"class_names" : list(set(item.class_name for item in menu)),
 		"items" : list(menu),
-		"items_json" : json.dumps(menu, cls=DjangoJSONEncoder),
 		"toppings": toppings
 	}
 	return render(request, "orders/index.html", context)
