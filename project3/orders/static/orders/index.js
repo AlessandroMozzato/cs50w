@@ -15,7 +15,8 @@ function addToCart(class_name, name, price, num_toppings, size) {
     cart[elements]['name'] = name;
     cart[elements]['size'] = size;
     cart[elements]['price'] = price;
-    cart[elements]['tops'] = parseInt(num_toppings);
+    cart[elements]['n_toppings'] = parseInt(num_toppings);
+    cart[elements]['toppings'] = [];
     cart[elements]['curr_top'] = 0;
 
     li.innerHTML =  class_name+' '+name+' ('+size+') '+price;
@@ -43,8 +44,9 @@ function addToppings(class_name, el) {
             var text = document.querySelector('#cartitems').lastElementChild.innerHTML;
             document.querySelector('#cartitems').lastElementChild.innerHTML = text + ", " + top;
             cart[el]['curr_top'] += 1;
+            cart[el]['toppings'].push(top)
 
-            if (cart[el]['tops'] == cart[elements]['curr_top']) {
+            if (cart[el]['n_toppings'] == cart[elements]['curr_top']) {
                 var ul = document.getElementById("toppings");
                 while(ul.firstChild){
                     ul.removeChild(ul.firstChild);

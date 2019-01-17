@@ -45,16 +45,27 @@
 
 	<div class="cartdiv">
 		<div class="cart">
-			<h2>Cart</h2>
-			<ul id="cartitems">
+			<form action="{% url 'submit_order' %}" method="post" name='cartsubmit'>
+				{% csrf_token %}
+				<h2>Cart</h2>
+				<ul id="cartitems">
+				</ul>
+
+				<ul id="toppings">	
+				</ul>
+
+				<hr>
 				
-			</ul>
-			<ul id="toppings">
-				
-			</ul>
-			<hr>
-			<h5 id="total"></h5>
-			
+				<h5 id="total"></h5>
+				<input type="submit" name='cart' value='Sbumit order' onclick="cartvalue();">
+
+			</form>
+			<script>
+				function cartvalue() {
+					var c = JSON.stringify(cart);
+					document.cartsubmit.cart.value = c		
+				}
+			</script>            			
 		</div>
 
 		<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>

@@ -4,11 +4,16 @@ from django.db import models
 class Menu(models.Model):
 	class_name = models.CharField(max_length=30)
 	name = models.CharField(max_length=30)
-	num_toppings = models.CharField(max_length=30)
+	num_toppings = models.IntegerField()
 	size = models.BooleanField(default=True)
 	price = models.DecimalField(max_digits=5, decimal_places=2)
 	price_big = models.DecimalField(max_digits=5, decimal_places=2, null=True)
 
+class Order(models.Model):
+	user = models.CharField(max_length=60)
+	items_in_menu = models.IntegerField()
+	total = models.DecimalField(max_digits=5, decimal_places=2)
+	items = models.CharField(max_length=1000)
 
 """
 Menu(class_name='Regular Pizza', name='Cheese', num_toppings=0, size=True, price=12.20, price_big=17.45)
