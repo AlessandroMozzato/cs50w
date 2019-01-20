@@ -1,0 +1,43 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Submit Order
+{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+
+	<div class="order_rev">
+		<form action="{% url 'submit_order' %}" method="post" name='cartsubmit'>
+			{% csrf_token %}
+			<h2>Order Review</h2>
+
+			<ul id="subcartitems">
+			</ul>
+
+			<h5 id="subtotal"></h5>
+
+		    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+	            data-key="{{ key }}"
+	            data-description="CS50 test"
+	            data-amount="{{ total }}"
+	            data-locale="auto">
+	        </script>
+
+			<input type="hidden" name='subcart' value='Submit Order'>
+
+		</form>
+		<script>
+			fillCart();
+			
+			var c = JSON.stringify(cart);
+			document.cartsubmit.subcart.value = c	
+			window.localStorage.removeItem('cart');
+			cart = {};
+		</script> 
+
+		<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>
+	</div>
+
+{% endif %}
+{% endblock %}

@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Menu(models.Model):
 	class_name = models.CharField(max_length=30)
+	mtype = models.CharField(max_length=5, default='pasta')
 	name = models.CharField(max_length=30)
 	num_toppings = models.IntegerField()
 	size = models.BooleanField(default=True)

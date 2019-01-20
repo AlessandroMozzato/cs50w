@@ -18,59 +18,67 @@
 	
 	<div class="menu">
 	    <h1>Menu</h1>
-	    	<table>
-				<tr>
-					<td></td>
-					<td style="font-weight: bold;">Small</td> 
-				    <td style="font-weight: bold;">Large</td>
+    	<table>
+			<tr>
+				<td></td>
+				<td style="font-weight: bold;">Small</td> 
+			    <td style="font-weight: bold;">Large</td>
+			</tr>
+			{% for c in class_names %}
+				<tr >
+					<td style="font-weight: bold;">{{ c }}</td>
 				</tr>
-				{% for c in class_names %}
-					<tr >
-						<td style="font-weight: bold;">{{ c }}</td>
-					</tr>
 
-					{% for item in items %}
-						{% if item.class_name == c %}
-				 	<tr>
-				    	<td width="65%">{{ item.name }}</td>
-					    <td width="25%"><a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.name}}", "{{item.price}}", "{{item.num_toppings}}", "small");'>{{ item.price }}</a></td> 
-					    <td width="25%"><a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.name}}", "{{item.price_big}}", "{{item.num_toppings}}", "large");'>{{ item.price_big }}</a></td>
-					</tr>
-
-						{% endif %}
-						{% endfor %}						
-				{% endfor %}
-			</table>
+				{% for item in items %}
+					{% if item.class_name == c %}
+					 	<tr>
+					    	<td width="65%">{{ item.name }}</td>
+						    <td width="25%">
+						    	{% if item.price %}
+						    	<a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.mtype}}", "{{item.name}}", "{{item.price}}", "{{item.num_toppings}}", "small");'>{{ item.price }}</a>
+						    	{% endif %}
+						    </td> 
+						    <td width="25%">
+						    	{% if item.price_big %}
+						    	<a href="#" onclick='javascript:addToCart("{{item.class_name}}", "{{item.mtype}}", "{{item.name}}", "{{item.price_big}}", "{{item.num_toppings}}", "large");'>{{ item.price_big }}
+						    	</a>
+						    	{% endif %}
+						    </td>
+						</tr>
+					{% endif %}
+				{% endfor %}						
+			{% endfor %}
+		</table>
 	</div>
 
 	<div class="cartdiv">
 		<div class="cart">
-			<form action="{% url 'submit_order' %}" method="post" name='cartsubmit'>
+			<form action="{% url 'confirm_order' %}" method="post" name='cartconf'>
 				{% csrf_token %}
 				<h2>Cart</h2>
 				<ul id="cartitems">
 				</ul>
 
-				<ul id="toppings">	
-				</ul>
+				<div id='toppingsdiv'>
+				</div>
 
 				<hr>
 				
 				<h5 id="total"></h5>
-				<input type="submit" name='cart' value='Sbumit order' onclick="cartvalue();">
+				<input type="submit" name='cart' value='Confirm Order', onclick="carttotal();">
+				<script type="text/javascript">
+					showCart();
+					function carttotal() {
+						document.cartconf.cart.value = total	
+					}
+				</script>
 
-			</form>
-			<script>
-				function cartvalue() {
-					var c = JSON.stringify(cart);
-					document.cartsubmit.cart.value = c		
-				}
-			</script>            			
+			</form>           			
 		</div>
 
 		<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>
 	</div>
- 	
+</div>	
 {% else %}
 	<p>You are not logged in</p>
 	<p><a href="{% url 'signup' %}">signup</a></p>

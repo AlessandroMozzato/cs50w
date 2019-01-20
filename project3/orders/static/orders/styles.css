@@ -35,13 +35,16 @@ img {
   background-color: #be0027;
 }
 
+.order_rev {
+  padding: 0 0 0 40px;
+  width: 100%;
+  background-color: #be0027; 
+}
+
 .logout {
   position:fixed;
   top:92%;
   right:5%;
-}
-
-.instert_message_nonfixed {
 }
 
 hr {
@@ -57,6 +60,21 @@ div.menu table {
 
 #class_name {
 	font-weight: bold; 
+}
+
+#close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#cccccc;
+}
+
+#close:hover {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    background:#cccccc;
+    color:#ffffff;
 }
 
 
