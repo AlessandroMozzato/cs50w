@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Menu(models.Model):
@@ -15,6 +16,14 @@ class Order(models.Model):
 	items_in_menu = models.IntegerField()
 	total = models.DecimalField(max_digits=5, decimal_places=2)
 	items = models.CharField(max_length=1000)
+
+class Carts(models.Model):
+	user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+	cart = models.CharField(max_length=1000)
 
 """
 Menu(class_name='Regular Pizza', name='Cheese', num_toppings=0, size=True, price=12.20, price_big=17.45)

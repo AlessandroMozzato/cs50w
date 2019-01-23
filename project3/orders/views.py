@@ -1,17 +1,18 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
+from django.shortcuts import render, redirect
 
-from django.contrib.auth.forms import UserCreationForm
+from orders.forms.forms import SignUpForm
+from django.contrib.auth import login, authenticate
 from django.urls import reverse, reverse_lazy
 from django.views import generic
+from django.core.serializers.json import DjangoJSONEncoder
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 import json
-from django.core.serializers.json import DjangoJSONEncoder
 import os
-
-from .models import Menu, Order
+from .models import Menu, Order, Carts
 import logging
-
 import stripe
 
 stripe_keys = {
@@ -25,27 +26,26 @@ stripe.api_key = stripe_keys['secret_key']
 def index(request):    
 	logger = logging.getLogger('applog')
 	menu = list(Menu.objects.all())
-
 	context = {
 		"class_names" : ['Regular Pizza', 'Sicilian Pizza', 'Subs', 'Pasta', 'Salads', 'Dinner Platters'],
 		"items" : list(menu),
-		
 	}
 	return render(request, "orders/index.html", context)
 
 def confirm_order(request):
 	total = request.POST['cart']
 
-	context = {
-		"key" : stripe_keys['publishable_key'],
-		"total" : total
-	}
-
-	return render(request, "orders/submit.html", context)
+	if float(total) > 0:
+		context = {
+			"key" : stripe_keys['publishable_key'],
+			"total" : str(float(total)*100)
+		}
+		return render(request, "orders/submit.html", context)
+	else:
+		return HttpResponseRedirect(reverse("index"))
 
 def submit_order(request):
 	cart = request.POST['subcart']
-	print(cart)
 	cart = json.loads(cart)
 	items = []
 	total = 0
@@ -60,24 +60,54 @@ def submit_order(request):
 	items = '; '.join(items)
 	items_in_menu = max([int(k) for k in cart.keys()])
 
-	f = Order(user=request.user.username, items_in_menu=items_in_menu, total=total, items=items)
+	user = request.user.username+' - '+request.user.email+' - '+request.user.first_name+' '+request.user.last_name
+	f = Order(user=user, items_in_menu=items_in_menu, total=total, items=items)
 	f.save()
 
 	customer = stripe.Customer.create(
-		email= request.user.username,
+		email= request.user.email,
 		source=request.POST['stripeToken']
 	)
-
 	charge = stripe.Charge.create(
 		customer=customer.id,
-		amount=total,
+		amount=int(total*100),
 		currency='eur',
 		description="Charge for {}".format(request.user.username),
 	)
-
 	return HttpResponseRedirect(reverse("index"))
 
-class SignUp(generic.CreateView):
-	form_class = UserCreationForm
-	success_url = reverse_lazy('login')
-	template_name = 'orders/signup.html'
+def signup(request):
+	if request.method == 'POST':
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=raw_password)
+			login(request, user)
+		
+			menu = list(Menu.objects.all())
+			user = User.objects.get(username=username)
+			cart = Carts.objects.get(user=user, cart=cart)
+			print('i am reading')
+			print(cart)
+			context = {
+				"class_names" : ['Regular Pizza', 'Sicilian Pizza', 'Subs', 'Pasta', 'Salads', 'Dinner Platters'],
+				"items" : list(menu),
+				"cart" : cart
+			}
+			return render(request, "orders/index.html", context)
+	else:
+		form = SignUpForm()
+	return render(request, 'orders/signup.html', {'form': form})
+
+@csrf_exempt
+def send_cart(request):
+
+	username = request.POST.get("username")
+	userobj = User.objects.get(username=username)
+	cart = request.POST.get("cart")
+	f = Carts(user=userobj, cart=cart)
+	f.save()
+
+	return JsonResponse({})

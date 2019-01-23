@@ -1,12 +1,10 @@
-if (window.localStorage.hasOwnProperty("cart") == false) {
-    var cart = new Object();
+if (window.localStorage.hasOwnProperty('cart') == false) {
+    cart = new Object();
 } else {
-    cart = JSON.parse(window.localStorage.getItem("cart"));
-}
-
+    cart = JSON.parse(window.localStorage.getItem('cart'));
+} 
 elements = Object.keys(cart).length;
-total=0.
-
+total=0.;
 toppings = new Object();
 
 toppings['pizza'] = ['Toppings', 'Pepperoni', 'Sausage', 'Mushrooms', 'Onions', 'Ham', 
@@ -16,7 +14,7 @@ toppings['pizza'] = ['Toppings', 'Pepperoni', 'Sausage', 'Mushrooms', 'Onions', 
 toppings['sub'] = ['Extra Cheese'];
 toppings['subs'] = ['Mushrooms', 'Green Peppers', 'Onions', 'Extra Cheese'];
 
-function addToCart(class_name, mtype, name, price, num_toppings, size) {
+function addToCart(class_name, mtype, name, price, num_toppings, size, username) {
     elements += 1;
 	cart[elements] = new Object();
 
@@ -39,6 +37,12 @@ function addToCart(class_name, mtype, name, price, num_toppings, size) {
 		addToppings(class_name, mtype, elements);
 	}
     window.localStorage.setItem("cart", JSON.stringify(cart));
+
+    data='username='+username+'&cart='+JSON.stringify(cart);
+    xhr = new XMLHttpRequest();
+    xhr.open('POST', send_cart, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    xhr.send(data);
 }
 
 function addToppings(class_name, mtype, el) {
@@ -89,12 +93,18 @@ function calcTotal() {
             total = total + twoPlacedFloat;
         }
     }
-
     text = "The current total is: "+total.toFixed(2).toString();
     document.querySelector('#total').innerHTML = text;
 }
 
-function showCart() {
+function showCart(cartel) {
+    console.log(cartel)
+    cartel = JSON.parse(cartel)
+    if (Object.keys(cartel).length > 0) {
+        console.log(Object.keys(cartel).length)
+        cart = cartel;
+    }
+
     total = 0.;
     for (var el in cart) {
         if (cart.hasOwnProperty(el)) {
@@ -111,7 +121,7 @@ function showCart() {
     document.querySelector('#total').innerHTML = text;
 }
 
-function fillCart(  ) {
+function fillCart() {
     total = 0.;
     for (var el in cart) {
         if (cart.hasOwnProperty(el)) {
@@ -128,4 +138,5 @@ function fillCart(  ) {
     document.querySelector('#subtotal').innerHTML = text;
 }
 
-// #italy #riesling #vino #wine #🍷 #glouglou #winestagram #winetasting #winelife #winelover #winetime #winery #winelovers #winecountry #instawine #wineoclock #winesaturday #wineday
+// #italy #riesling #vino #wine #🍷 #glouglou #winestagram #winetasting #winelife #winelover #winetime #winery
+// #winelovers #winecountry #instawine #wineoclock #winesaturday #wineday
