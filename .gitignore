@@ -3,3 +3,4 @@ flask_session
 *.pyc
 run.sh
 *.zip
+*.mov
