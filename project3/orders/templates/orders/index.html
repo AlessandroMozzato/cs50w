@@ -69,12 +69,17 @@
 				<h5 id="total"></h5>
 				<input type="submit" name='cart' value='Confirm Order', onclick="carttotal();">
 				<script type="text/javascript">
-					showCart("{{ cart | safe }}");
 					function carttotal() {
 						document.cartconf.cart.value = total	
 					}
 				</script>
 
+				{% if user %}
+					<script type="text/javascript">
+						var get_cart = "{% url 'get_cart' user %}";
+						showCart();
+					</script>
+				{% endif %}
 			</form>           			
 		</div>
 

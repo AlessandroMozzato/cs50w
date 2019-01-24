@@ -4,7 +4,7 @@ if (window.localStorage.hasOwnProperty('cart') == false) {
     cart = JSON.parse(window.localStorage.getItem('cart'));
 } 
 elements = Object.keys(cart).length;
-total=0.;
+total = 0.;
 toppings = new Object();
 
 toppings['pizza'] = ['Toppings', 'Pepperoni', 'Sausage', 'Mushrooms', 'Onions', 'Ham', 
@@ -34,7 +34,7 @@ function addToCart(class_name, mtype, name, price, num_toppings, size, username)
     calcTotal();
     
     if (parseInt(num_toppings) > 0) {
-		addToppings(class_name, mtype, elements);
+		addToppings(class_name, mtype, elements, username);
 	}
     window.localStorage.setItem("cart", JSON.stringify(cart));
 
@@ -45,7 +45,7 @@ function addToCart(class_name, mtype, name, price, num_toppings, size, username)
     xhr.send(data);
 }
 
-function addToppings(class_name, mtype, el) {
+function addToppings(class_name, mtype, el, username) {
     var txt = document.querySelector('#toppingsdiv').innerHTML;
     var toadd = '<div id="close" onclick="closeTopps();">Close X</div><ul id="toppings"></ul>'
     document.querySelector('#toppingsdiv').innerHTML = toadd + txt;
@@ -75,6 +75,12 @@ function addToppings(class_name, mtype, el) {
                 document.querySelector('#toppingsdiv').innerHTML = '';
             }
             window.localStorage.setItem("cart", JSON.stringify(cart));
+            console.log('second push')
+            data='username='+username+'&cart='+JSON.stringify(cart);
+            xhr = new XMLHttpRequest();
+            xhr.open('POST', send_cart, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.send(data);
         }
     	li.appendChild(aa);
     	document.querySelector('#toppings').append(li);
@@ -97,16 +103,70 @@ function calcTotal() {
     document.querySelector('#total').innerHTML = text;
 }
 
-function showCart(cartel) {
-    console.log(cartel)
-    cartel = JSON.parse(cartel)
-    if (Object.keys(cartel).length > 0) {
-        console.log(Object.keys(cartel).length)
-        cart = cartel;
+function showCart() {
+    request = new XMLHttpRequest();
+    request.open('GET', get_cart, true); 
+    cart = new Object();
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            console.log('good response')
+            cart = JSON.parse(request.responseText);
+            while (typeof(cart) != "object") {
+                cart = JSON.parse(cart);
+            }
+            console.log(cart)
+
+            total = 0.;
+            for (var el in cart) {
+                console.log(el);
+                if (cart.hasOwnProperty(el)) {
+                    const li = document.createElement('li');
+                    li.innerHTML =  cart[el]['class_name']+' '+cart[el]['name']+' ('+cart[el]['size']+') '+ 
+                                        cart[el]['price'].toString() + ", " + cart[el]['toppings'].join(', ');
+                    document.querySelector('#cartitems').append(li);
+
+                    var twoPlacedFloat = + parseFloat(cart[el]['price']);
+                    total = total + twoPlacedFloat;
+                }
+            }
+            console.log('end of loop')
+            text = "The current total is: "+total.toFixed(2).toString();
+            document.querySelector('#total').innerHTML = text;
+        } else {
+            console.log('there was a server error')
+            
+            if (window.localStorage.hasOwnProperty('cart') == false) {
+                cart = new Object();
+            } else {
+                cart = JSON.parse(window.localStorage.getItem('cart'));
+            } 
+
+            total = 0.;
+            for (var el in cart) {
+                console.log(el);
+                if (cart.hasOwnProperty(el)) {
+                    const li = document.createElement('li');
+                    li.innerHTML =  cart[el]['class_name']+' '+cart[el]['name']+' ('+cart[el]['size']+') '+ 
+                                        cart[el]['price'].toString() + ", " + cart[el]['toppings'].join(', ');
+                    document.querySelector('#cartitems').append(li);
+
+                    var twoPlacedFloat = + parseFloat(cart[el]['price']);
+                    total = total + twoPlacedFloat;
+                }
+            }
+            console.log('end of loop')
+            text = "The current total is: "+total.toFixed(2).toString();
+            document.querySelector('#total').innerHTML = text;
+        };
     }
+    request.onerror = function() {
+        console.log('there was an error')
+    };
+    request.send();
 
     total = 0.;
     for (var el in cart) {
+        console.log(el);
         if (cart.hasOwnProperty(el)) {
             const li = document.createElement('li');
             li.innerHTML =  cart[el]['class_name']+' '+cart[el]['name']+' ('+cart[el]['size']+') '+ 
@@ -117,12 +177,14 @@ function showCart(cartel) {
             total = total + twoPlacedFloat;
         }
     }
+    console.log('end of loop')
     text = "The current total is: "+total.toFixed(2).toString();
     document.querySelector('#total').innerHTML = text;
 }
 
 function fillCart() {
     total = 0.;
+    document.querySelector('#subcartitems').innerHTML = '';
     for (var el in cart) {
         if (cart.hasOwnProperty(el)) {
             const li = document.createElement('li');
@@ -137,6 +199,3 @@ function fillCart() {
     text = "The current total is: "+total.toFixed(2).toString();
     document.querySelector('#subtotal').innerHTML = text;
 }
-
-// #italy #riesling #vino #wine #🍷 #glouglou #winestagram #winetasting #winelife #winelover #winetime #winery
-// #winelovers #winecountry #instawine #wineoclock #winesaturday #wineday

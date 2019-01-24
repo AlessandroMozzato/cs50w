@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
@@ -45,6 +46,7 @@ def confirm_order(request):
 		return HttpResponseRedirect(reverse("index"))
 
 def submit_order(request):
+	print(request.POST)
 	cart = request.POST['subcart']
 	cart = json.loads(cart)
 	items = []
@@ -74,7 +76,7 @@ def submit_order(request):
 		currency='eur',
 		description="Charge for {}".format(request.user.username),
 	)
-	return HttpResponseRedirect(reverse("index"))
+	return render(request, 'orders/complete.html')
 
 def signup(request):
 	if request.method == 'POST':
@@ -85,18 +87,7 @@ def signup(request):
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(username=username, password=raw_password)
 			login(request, user)
-		
-			menu = list(Menu.objects.all())
-			user = User.objects.get(username=username)
-			cart = Carts.objects.get(user=user, cart=cart)
-			print('i am reading')
-			print(cart)
-			context = {
-				"class_names" : ['Regular Pizza', 'Sicilian Pizza', 'Subs', 'Pasta', 'Salads', 'Dinner Platters'],
-				"items" : list(menu),
-				"cart" : cart
-			}
-			return render(request, "orders/index.html", context)
+			return HttpResponseRedirect(reverse("index"))
 	else:
 		form = SignUpForm()
 	return render(request, 'orders/signup.html', {'form': form})
@@ -107,7 +98,27 @@ def send_cart(request):
 	username = request.POST.get("username")
 	userobj = User.objects.get(username=username)
 	cart = request.POST.get("cart")
-	f = Carts(user=userobj, cart=cart)
-	f.save()
 
+	try:
+		f = Carts.objects.get(user=userobj)
+		f.delete()
+		f = Carts(user=userobj, cart=cart)
+		f.save()
+	except:
+		f = Carts(user=userobj, cart=cart)
+		f.save()
 	return JsonResponse({})
+
+@csrf_exempt
+def get_cart(request, username): 
+	try:
+		userobj = User.objects.get(username=username)
+		cart = Carts.objects.get(user=userobj)
+	except:
+		userobj = User.objects.get(username=username)
+		f = Carts(user=userobj, cart={})
+		f.save()
+
+		cart = Carts.objects.get(user=userobj)
+
+	return JsonResponse(cart.cart, safe=False)

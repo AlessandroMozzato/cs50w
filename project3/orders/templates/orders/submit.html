@@ -8,7 +8,7 @@
 {% if user.is_authenticated %}
 
 	<div class="order_rev">
-		<form action="{% url 'submit_order' %}" method="post" name='cartsubmit'>
+		<form action="{% url 'submit_order' %}" method="post" name='cartsubmit' id="stripebtn">
 			{% csrf_token %}
 			<h2>Order Review</h2>
 
@@ -17,7 +17,9 @@
 
 			<h5 id="subtotal"></h5>
 
-		    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+		    <script 
+		    	src="https://checkout.stripe.com/checkout.js" 
+		    	class="stripe-button"
 	            data-key="{{ key }}"
 	            data-description="CS50 test"
 	            data-amount="{{ total }}"
@@ -28,12 +30,54 @@
 
 		</form>
 		<script>
+
+			var get_cart = "{% url 'get_cart' user %}";
+    		var send_cart = "{% url 'send_cart' %}";
+
+		    if (window.localStorage.hasOwnProperty('cart') == false) {
+		        cart = new Object();
+		    } else {
+		        cart = JSON.parse(window.localStorage.getItem('cart'));
+		    } 
+		    elements = Object.keys(cart).length;
+		    total=0.;
+
+		    request = new XMLHttpRequest();
+		    request.open('GET', get_cart, true); 
+		    request.onload = function() {
+		        if (request.status >= 200 && request.status < 400) {
+		            console.log('good response')
+		            cart = JSON.parse(request.responseText);
+		            while (typeof(cart) != "object") {
+		                cart = JSON.parse(cart);
+		            }
+		            console.log(cart)
+		            fillCart();
+		        } else {
+		            console.log('there was a server error')
+		            }
+		        };
+		    request.onerror = function() {
+		        console.log('there was an error')
+		    };
+		    request.send();
+
 			fillCart();
-			
+
 			var c = JSON.stringify(cart);
-			document.cartsubmit.subcart.value = c	
-			window.localStorage.removeItem('cart');
-			cart = {};
+			document.cartsubmit.subcart.value = c;
+			
+			var btn1 = document.querySelector('#stripebtn');
+			btn1.addEventListener('click', function(){   
+			    window.localStorage.removeItem('cart');
+			    cart = {};
+			    
+			    data='username='+"{{ user }}"+'&cart='+JSON.stringify(cart);
+			    xhr = new XMLHttpRequest();
+			    xhr.open('POST', send_cart, true);
+			    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+			    xhr.send(data);
+			});
 		</script> 
 
 		<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>

@@ -1,0 +1,15 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+    Order Completed
+{% endblock %}
+	
+{% block body %}
+<div class="order_rev">
+	<h1>Your order is complete!</h1>
+	<hr>
+	<hr>
+	<h5>Make a new <a href="{% url 'logout' %}">order</a></h5>
+	<div class="logout"><p>User: {{ user }} - <a href="{% url 'logout' %}">logout</a></p></div>
+<div>
+{% endblock %}
